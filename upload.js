@@ -1,11 +1,11 @@
 const Minio = require('minio');
-const { MINIO_ENDPOINT, MINIO_ACCESS_KEY, MINIO_SECRET_KEY } = process.env;
+const { endPoint, accessKey, secretKey } = process.env;
 var minioClient = new Minio.Client({
-    endPoint: MINIO_ENDPOINT,
+    endPoint,
     port: 443,
     useSSL: true,
-    accessKey: MINIO_ACCESS_KEY,
-    secretKey: MINIO_SECRET_KEY
+    accessKey,
+    secretKey,
 });
 const file = './public/version.json';
 var metaData = {
