@@ -1,5 +1,8 @@
 const Minio = require('minio');
-const { endPoint, accessKey, secretKey } = process.env;
+console.log(process.argv);
+const endPoint = process.argv[2];
+const accessKey = process.argv[3];
+const secretKey = process.argv[4];
 var minioClient = new Minio.Client({
     endPoint,
     port: 443,
