@@ -16,23 +16,27 @@ jobs:
     steps:
       - name: 拉取代码
         uses: actions/checkout@v2
-      - name: 处理 Mac 环境
-        if: matrix.platform == 'macos-latest'
-        run: |
-          brew install minio/stable/mc
-          mc --help
-      - name: 处理 Linux 环境
-        if: matrix.platform == 'ubuntu-latest'
-        run: |
-          yum install weget -y
-          weget https://dl.min.io/client/mc/release/linux-amd64/mc
-          chmod +x mc
-          ./mc --help
-      - name: 处理 Windows 环境
-        if: matrix.platform == 'windows-latest'
-        run: |
-          curl https://dl.min.io/client/mc/release/windows-amd64/mc.exe
-          mc.exe --help
+      - name: 设置 Node 环境
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+      # - name: 处理 Mac 环境
+      #   if: matrix.platform == 'macos-latest'
+      #   run: |
+      #     brew install minio/stable/mc
+      #     mc --help
+      # - name: 处理 Linux 环境
+      #   if: matrix.platform == 'ubuntu-latest'
+      #   run: |
+      #     yum install weget -y
+      #     weget https://dl.min.io/client/mc/release/linux-amd64/mc
+      #     chmod +x mc
+      #     ./mc --help
+      # - name: 处理 Windows 环境
+      #   if: matrix.platform == 'windows-latest'
+      #   run: |
+      #     curl https://dl.min.io/client/mc/release/windows-amd64/mc.exe
+      #     mc.exe --help
       - name: 运行js脚本
         run: |
           node ./upload.js
