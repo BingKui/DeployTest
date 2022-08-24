@@ -24,57 +24,65 @@ jobs:
       - name: 处理 Linux 环境
         if: matrix.platform == 'ubuntu-latest'
         run: |
+          yum install weget -y
           weget https://dl.min.io/client/mc/release/linux-amd64/mc
           chmod +x mc
           ./mc --help
       - name: 处理 Windows 环境
         if: matrix.platform == 'windows-latest'
         run: |
-          curl https://dl.min.io/client/mc/release/linux-amd64/mc
+          curl https://dl.min.io/client/mc/release/windows-amd64/mc.exe
           mc.exe --help
-      - name: 设置 OSS 信息
+      - name: 运行js脚本
         run: |
-          mc alias set deploy $MINIO_ENDPOINT $MINIO_ACCESS_KEY $MINIO_SECRET_KEY --api S3v4
+          node ./upload.js
         env:
           MINIO_ENDPOINT: ${{ secrets.MINIO_ENDPOINT }}
           MINIO_ACCESS_KEY: ${{ secrets.MINIO_ACCESS_KEY }}
           MINIO_SECRET_KEY: ${{ secrets.MINIO_SECRET_KEY }}
-      - name: 上传文件
-        run: |
-          mc mirror --overwrite $SOURCE_DIR "deploy/$BUCKET$TARGET_DIR"
-        env:
-          BUCKET: "app"
-          SOURCE_DIR: "public/version.json"
-          TARGET_DIR: "/iHost"
-          MINIO_ACCESS_KEY: ${{ secrets.MINIO_ACCESS_KEY }}
-          MINIO_SECRET_KEY: ${{ secrets.MINIO_SECRET_KEY }}
-      - name: 上传 MacOS 文件
-        if: matrix.platform == 'ubuntu-latest'
-        run: |
-          mc mirror --overwrite $SOURCE_DIR "deploy/$BUCKET$TARGET_DIR"
-        env:
-          BUCKET: "app"
-          SOURCE_DIR: "public/linux.json"
-          TARGET_DIR: "/iHost"
-          MINIO_ACCESS_KEY: ${{ secrets.MINIO_ACCESS_KEY }}
-          MINIO_SECRET_KEY: ${{ secrets.MINIO_SECRET_KEY }}
-      - name: 上传 Windows 文件
-        if: matrix.platform == 'windows-latest'
-        run: |
-          mc mirror --overwrite $SOURCE_DIR "deploy/$BUCKET$TARGET_DIR"
-        env:
-          BUCKET: "app"
-          SOURCE_DIR: "public/windows.json"
-          TARGET_DIR: "/iHost"
-          MINIO_ACCESS_KEY: ${{ secrets.MINIO_ACCESS_KEY }}
-          MINIO_SECRET_KEY: ${{ secrets.MINIO_SECRET_KEY }}
-      - name: 上传 MacOS 文件
-        if: matrix.platform == 'macos-latest'
-        run: |
-          mc mirror --overwrite $SOURCE_DIR "deploy/$BUCKET$TARGET_DIR"
-        env:
-          BUCKET: "app"
-          SOURCE_DIR: "public/mac.json"
-          TARGET_DIR: "/iHost"
-          MINIO_ACCESS_KEY: ${{ secrets.MINIO_ACCESS_KEY }}
-          MINIO_SECRET_KEY: ${{ secrets.MINIO_SECRET_KEY }}
+      # - name: 设置 OSS 信息
+      #   run: |
+      #     mc alias set deploy $MINIO_ENDPOINT $MINIO_ACCESS_KEY $MINIO_SECRET_KEY --api S3v4
+      #   env:
+      #     MINIO_ENDPOINT: ${{ secrets.MINIO_ENDPOINT }}
+      #     MINIO_ACCESS_KEY: ${{ secrets.MINIO_ACCESS_KEY }}
+      #     MINIO_SECRET_KEY: ${{ secrets.MINIO_SECRET_KEY }}
+      # - name: 上传文件
+      #   run: |
+      #     mc mirror --overwrite $SOURCE_DIR "deploy/$BUCKET$TARGET_DIR"
+      #   env:
+      #     BUCKET: "app"
+      #     SOURCE_DIR: "public/version.json"
+      #     TARGET_DIR: "/iHost"
+      #     MINIO_ACCESS_KEY: ${{ secrets.MINIO_ACCESS_KEY }}
+      #     MINIO_SECRET_KEY: ${{ secrets.MINIO_SECRET_KEY }}
+      # - name: 上传 MacOS 文件
+      #   if: matrix.platform == 'ubuntu-latest'
+      #   run: |
+      #     mc mirror --overwrite $SOURCE_DIR "deploy/$BUCKET$TARGET_DIR"
+      #   env:
+      #     BUCKET: "app"
+      #     SOURCE_DIR: "public/linux.json"
+      #     TARGET_DIR: "/iHost"
+      #     MINIO_ACCESS_KEY: ${{ secrets.MINIO_ACCESS_KEY }}
+      #     MINIO_SECRET_KEY: ${{ secrets.MINIO_SECRET_KEY }}
+      # - name: 上传 Windows 文件
+      #   if: matrix.platform == 'windows-latest'
+      #   run: |
+      #     mc mirror --overwrite $SOURCE_DIR "deploy/$BUCKET$TARGET_DIR"
+      #   env:
+      #     BUCKET: "app"
+      #     SOURCE_DIR: "public/windows.json"
+      #     TARGET_DIR: "/iHost"
+      #     MINIO_ACCESS_KEY: ${{ secrets.MINIO_ACCESS_KEY }}
+      #     MINIO_SECRET_KEY: ${{ secrets.MINIO_SECRET_KEY }}
+      # - name: 上传 MacOS 文件
+      #   if: matrix.platform == 'macos-latest'
+      #   run: |
+      #     mc mirror --overwrite $SOURCE_DIR "deploy/$BUCKET$TARGET_DIR"
+      #   env:
+      #     BUCKET: "app"
+      #     SOURCE_DIR: "public/mac.json"
+      #     TARGET_DIR: "/iHost"
+      #     MINIO_ACCESS_KEY: ${{ secrets.MINIO_ACCESS_KEY }}
+      #     MINIO_SECRET_KEY: ${{ secrets.MINIO_SECRET_KEY }}
