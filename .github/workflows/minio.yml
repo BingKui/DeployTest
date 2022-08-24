@@ -39,6 +39,7 @@ jobs:
       #     mc.exe --help
       - name: 运行js脚本
         run: |
+          yarn
           node ./upload.js
         env:
           MINIO_ENDPOINT: ${{ secrets.MINIO_ENDPOINT }}
